@@ -27,7 +27,6 @@
 // @ is an alias to /src
 import EventCard from "@/components/EventCard.vue";
 import EventService from "@/services/EventService";
-import NProgress from "nprogress";
 export default {
   name: "EventList",
   props: ["page"],
@@ -39,7 +38,6 @@ export default {
   },
 
   beforeRouteEnter(routeTo, routeFrom, next) {
-    NProgress.start();
     EventService.getEvents(2, parseInt(routeTo.query.page) || 1)
       .then((response) => {
         next((comp) => {
@@ -50,14 +48,13 @@ export default {
       })
       .catch(() => {
         next({ name: "NetworkError" }); //if the network failed
-      })
-      .finally(() => {
-        NProgress.done();
       });
   },
+  //for pagination
   beforeRouteUpdate(routeTo) {
-    NProgress.start();
-    EventService.getEvents(2, parseInt(routeTo.query.page) || 1)
+    //since there is no using next, we need to use 'return' to know the wait to api call by the vue router
+    //so the progress bar loading time and api call time will match
+    return EventService.getEvents(2, parseInt(routeTo.query.page) || 1)
       .then((response) => {
         //since the component is already created, use this keyword
         this.events = response.data;
@@ -65,9 +62,6 @@ export default {
       })
       .catch(() => {
         return { name: "NetworkError" };
-      })
-      .finally(() => {
-        NProgress.done();
       });
   },
   computed: {

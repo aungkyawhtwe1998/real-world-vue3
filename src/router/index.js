@@ -7,6 +7,7 @@ import EventEdit  from '../views/event/Edit.vue'
 import About from '../views/About'
 import NotFound from '../views/NotFound.vue'
 import NetworkError from '../views/NetworkError.vue'
+import NProgress from 'nprogress'
 const routes = [
   {
     path: '/',
@@ -80,5 +81,14 @@ const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,
 })
+//Vue router Global Navigation guards
+//start progress bar before navigation
+router.beforeEach(()=>{
+  NProgress.start()
+})
 
+//finish the progress bar after navigation
+router.afterEach(()=>{
+  NProgress.done()
+})
 export default router
