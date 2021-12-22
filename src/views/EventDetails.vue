@@ -12,11 +12,12 @@ export default {
   props: ['id'],
   data() {
     return {
+      // reactive obj
       event: null,
     }
   },
   created() {
-    EventService.getEvent(this.id)
+    EventService.getEvent(this.id) //idto get event info from API
       .then((response) => {
         console.log(response.data)
         this.event = response.data
